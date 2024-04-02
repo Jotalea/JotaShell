@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JotaShell</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: monospace;
+            margin: 0;
+            padding: 0;
+        }
+
+        #cmdForm {
+            display: flex;
+            position: fixed;
+            bottom: 0;
+            justify-content: flex-end;
+            align-items: center;
+            height: 100vh;
+        }
+
+        input[type="text"] {
+            background-color: black;
+            color: white;
+            border: 1px solid white;
+            width: 70%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 4px;
+        }
+
+        button[type="submit"] {
+            background-color: black;
+            color: white;
+            border: 1px solid white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        #output {
+            color: white;
+            font-family: monospace;
+            z-index: 1;
+        }
+
+        #footer {
+            display: flex;
+            justify-content: flex-end;
+            position: fixed; /* Make the footer stay fixed */
+            bottom: 0; /* Position it at the bottom */
+            left: 0; /* Align it to the left */
+            width: 100%; /* Make it fill the entire width */
+            background-color: black;
+            color: white;
+            text-align: center; /* Center the text */
+            padding: 10px; /* Add some padding */
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Welcome to JotaShell</h1>
+        <p>Send jhelp to see available commands.</p>
+        <div id="output"></div>
+        <form id="cmdForm" method="post" action="/cmd">
+            <input type="text" name="cmd" placeholder="Enter command">
+            <button type="submit">Run</button>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#cmdForm').submit(function(e) {
+                e.preventDefault();
+                $.post('/cmd', $('#cmdForm').serialize(), function(data) {
+                    $('#output').append('<div>' + data.output + '</div>');
+                    $('#cmdForm input[type="text"]').val(''); // Clear input field after command is executed
+                });
+            });
+        });
+    </script>
+</body>
+</html>
